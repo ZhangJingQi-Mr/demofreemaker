@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--namespace对应接口的全路径-->
+<mapper namespace="com.bdqn.mapper.user.UserMapper">
+    <!--登录-->
+    <select id="getLoginUser" resultType="User">
+          select * from smbms_user where userCode=#{userCode} and userPassword=#{userPassword}
+    </select>
+
+    <!--通过用户编码获取用户-->
+    <select id="getUserByUserCode" resultType="User">
+        select * from smbms_user where userCode=#{userCode}
+    </select>
+
+    <!--通过条件查询表记录数-->
+    <select id="getUserCount" resultType="int">
+        select count(1) as count from smbms_user u,smbms_role r
+        <where>
+            u.userRole = r.id
+            <if test="userName!=null and userName!=''">
+                and u.userName like "%"#{userName}"%"
+            </if>
+            <if test="userRole!=null and userRole!=0">
+                and u.userRole = #{userRole}
+            </if>
+        </where>
+    </select>
+
+    <!--通过条件查询-userList-->
+    <select id="getUserList" resultType="User">
+        select u.*,r.roleName as userRoleName from smbms_user u,smbms_role r
+        <where>
+            u.userRole = r.id
+        </where>
+        <if test="userName!=null and userName!=''">
+            and u.userName like "%"#{userName}"%"
+        </if>
+        <if test="userRole!=null and userRole!=0">
+            and u.userRole = #{userRole}
+        </if>
+        LIMIT #{currentPageNo},#{pageSize}
+    </select>
+
+    <!--添加用户-->
+    <insert id="add">
+      insert into smbms_user (userCode,userName,userPassword,
+					userRole,gender,birthday,phone,address,creationDate,createdBy,idPicPath)
+					values(#{userCode},#{userName},#{userPassword},#{userRole},#{gender},#{birthday},
+					#{phone},#{address},#{creationDate},#{createdBy},#{idPicPath})
+    </insert>
+
+    <!--删除用户-->
+    <delete id="deleteUserById">
+        delete from smbms_user where id=#{id}
+    </delete>
+
+    <!--修改用户-->
+    <update id="modify">
+        update smbms_user set userName=#{userName},gender=#{gender},birthday=#{birthday},phone=#{phone},
+        address=#{address},userRole=#{userRole},modifyBy=#{modifyBy},modifyDate=#{modifyDate} where id =#{id}
+    </update>
+
+    <!--获取用户id-->
+    <select id="getUserById" resultType="User">
+        select u.*,r.roleName as userRoleName from smbms_user u,smbms_role r where u.id=#{id} and u.userRole = r.id
+    </select>
+
+</mapper>

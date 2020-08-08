@@ -1,0 +1,38 @@
+#端口号
+server:
+ port: 28080
+#Log日志
+logging:
+ level:
+  web: DEBUG
+  com.bdqn: DEBUG
+
+spring:
+ freemarker:
+# 设置模板后缀名
+  suffix: .ftl
+# 设置文档类型
+  content-type: text/html
+# 设置页面编码格式
+  charset: UTF-8
+# 设置页面缓存
+  cache: false
+# 设置静态文件路径，js,css等
+ mvc:
+  static-path-pattern: /static/**
+#数据源配置（Spring Boot 2默认数据库连接池选择了HikariCP）
+ datasource:
+    name: test
+    #SpringBoot2.1在你没有指定MySQL驱动版本的情况下它自动依赖的驱动是8.0很高的版本,需要设置serverTimezone=UTC
+    url: jdbc:mysql://127.0.0.1:3306/smbms?serverTimezone=UTC
+    username: root
+    password: 191228
+    #mysql6.0之后使用com.mysql.cj.jdbc.Driver
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+#mybatis配置
+#定义实体类别名配置
+mybatis:
+  type-aliases-package: com.bdqn.pojo
+  #定义Mapper接口映射文件位置, xml文件需要放在resources目录下
+  mapper-locations: classpath:mapper/**/*.xml
